@@ -136,3 +136,12 @@ test('caches lookups', (t) => {
   t.false(list2.some(item => item.endsWith('symlinked.js')));
   t.false(list2.some(item => item.endsWith('test-dep.js')));
 });
+
+test('skip dependencies like /opt/lambaLayer.js', (t) => {
+  const fileName = path.join(__dirname, 'fixtures', 'lambda-layer.js');
+
+  const list = getDependencyList(fileName, serverless);
+
+  t.true(list.some(item => item.indexOf(`/opt/lambdaLayer.js`) == -1));
+  t.true(list.some(item => item.match(/test-dep/)));
+});
